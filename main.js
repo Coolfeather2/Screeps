@@ -1,40 +1,38 @@
+
+// import modules
+var roleHarvester = require('role.harvester');
+var roleUpgrader = require('role.upgrader');
+
 module.exports.loop = function () {
     // for every creep name in Game.creeps
     for (let name in Game.creeps) {
-
         // get the creep object
         var creep = Game.creeps[name];
 
-        console.log(name + " is working: " + creep.memory.working);
+        // if creep is harvester, call harvester script
+        if (creep.memory.role == 'Harvester') {
+            roleHarvester.run(creep);
+        }
+        // if creep is upgrader, call upgrader script
+        else if (creep.memory.role == 'Upgrader') {
+            roleUpgrader.run(creep);
+        }
+    }
 
-        // if creep is bringing energy to the spawn but has no energy left
-        if (creep.memory.working == true && creep.carry.energy == 0) {
-            // switch state
-            creep.memory.working = false;
-        }
-        // if creep is harvesting energy but is full
-        else if (creep.memory.working == false && creep.carry.energy == creep.carryCapacity) {
-            // switch state
-            creep.memory.working = true;
-        }
+    var minimumNumberOfHarvesters = 3;
+    var minumumNumberOfUpgraders = 3;
+    var numberOfHarvesters = _.sum(Game.creeps, (c) => c.memory.role == 'Harvester');
+    var numberOfUpgraders = _.sum(Game.creeps, (c) => c.memory.role == 'Upgrader');
 
-        // if creep is supposed to transfer energy to the spawn
-        if (creep.memory.working == true) {
-            // try to transfer energy, if the spawn is not in range
-            if (creep.transfer(Game.spawns.Spawn1, RESOURCE_ENERGY) == ERR_NOT_IN_RANGE) {
-                // move towards the spawn
-                creep.moveTo(Game.spawns.Spawn1);
-            }
-        }
-        // if creep is supposed to harvest energy from source
-        else {
-            // find closest source
-            var source = creep.pos.findClosestByPath(FIND_SOURCES);
-            // try to harvest energy, if the source is not in range
-            if (creep.harvest(source) == ERR_NOT_IN_RANGE) {
-                // move towards the source
-                creep.moveTo(source);
-            }
-        }
+    if (numberOfHarvesters < minimumNumberOfHarvesters) {
+        var name = Game.spawns.Spawn1.createCreep([WORK, WORK, CARRY, MOVE], undefined, { role: 'Harvester', working: false });
+    }
+    else if (numberOfUpgraders < minumumNumberOfUpgraders) {
+        var name = Game.spawns.Spawn1.createCreep([WORK, CARRY, MOVE, MOVE], undefined, { role: 'Upgrader', working: false });
+    }
+
+
+    if (!(name < 0)) {
+            console.log("Spawned new creep: " + name);
     }
 };
