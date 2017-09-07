@@ -1,9 +1,16 @@
-
 // import modules
 var roleHarvester = require('role.harvester');
 var roleUpgrader = require('role.upgrader');
 
 module.exports.loop = function () {
+    //clear memory
+    for (let name in Memory.creeps) {
+        if (Game.creeps[name] == undefined) {
+            delete Memory.creeps[name];
+        }
+    }
+    
+    
     // for every creep name in Game.creeps
     for (let name in Game.creeps) {
         // get the creep object
@@ -19,20 +26,21 @@ module.exports.loop = function () {
         }
     }
 
-    var minimumNumberOfHarvesters = 3;
-    var minumumNumberOfUpgraders = 3;
+    var minimumNumberOfHarvesters = 2;
+    var minumumNumberOfUpgraders = 4;
     var numberOfHarvesters = _.sum(Game.creeps, (c) => c.memory.role == 'Harvester');
     var numberOfUpgraders = _.sum(Game.creeps, (c) => c.memory.role == 'Upgrader');
+    var name = undefined;
 
     if (numberOfHarvesters < minimumNumberOfHarvesters) {
-        var name = Game.spawns.Spawn1.createCreep([WORK, WORK, CARRY, MOVE], undefined, { role: 'Harvester', working: false });
+        name = Game.spawns.Spawn1.createCreep([WORK, WORK, CARRY, MOVE], undefined, { role: 'Harvester', working: false });
     }
     else if (numberOfUpgraders < minumumNumberOfUpgraders) {
-        var name = Game.spawns.Spawn1.createCreep([WORK, CARRY, MOVE, MOVE], undefined, { role: 'Upgrader', working: false });
+        name = Game.spawns.Spawn1.createCreep([WORK, CARRY, MOVE, MOVE], undefined, { role: 'Upgrader', working: false });
     }
 
 
     if (!(name < 0)) {
-            console.log("Spawned new creep: " + name);
+        console.log("Spawned new creep: " + name);
     }
 };
