@@ -30,14 +30,19 @@ module.exports.loop = function () {
         else if (creep.memory.role == 'Builder') {
             roleBuilder.run(creep);
         }
+        else if (creep.memory.role == 'Repairer') {
+            roleRepairer.run(creep);
+        }
     }
 
-    var minimumNumberOfHarvesters = 3;
+    var minimumNumberOfHarvesters = 2;
     var minumumNumberOfUpgraders = 5;
     var minumumNumberOfBuilders = 5;
+    var minumumNumberOfRepairer = 2;
     var numberOfHarvesters = _.sum(Game.creeps, (c) => c.memory.role == 'Harvester');
     var numberOfUpgraders = _.sum(Game.creeps, (c) => c.memory.role == 'Upgrader');
     var numberOfBuilders = _.sum(Game.creeps, (c) => c.memory.role == 'Builder');
+    var numberOfRepairer = _.sum(Game.creeps, (c) => c.memory.role == 'Repairer');
     var name = undefined;
 
     if (numberOfHarvesters < minimumNumberOfHarvesters) {
@@ -45,6 +50,9 @@ module.exports.loop = function () {
     }
     else if (numberOfUpgraders < minumumNumberOfUpgraders) {
         name = Game.spawns.Spawn1.createCreep([WORK, CARRY, MOVE, MOVE], undefined, { role: 'Upgrader', working: false });
+    }
+    else if (numberOfRepairer < minumumNumberOfRepairer) {
+        name = Game.spawns.Spawn1.createCreep([WORK, WORK, CARRY, MOVE], undefined, { role: 'Repairer', working: false });
     }
     else if (numberOfBuilders < minumumNumberOfBuilders) {
         name = Game.spawns.Spawn1.createCreep([WORK, WORK, CARRY, MOVE], undefined, { role: 'Builder', working: false });
