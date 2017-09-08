@@ -1,6 +1,7 @@
 // import modules
 var roleHarvester = require('role.harvester');
 var roleUpgrader = require('role.upgrader');
+var screepsplus = require('screepsplus')
 
 module.exports.loop = function () {
     //clear memory
@@ -26,8 +27,8 @@ module.exports.loop = function () {
         }
     }
 
-    var minimumNumberOfHarvesters = 2;
-    var minumumNumberOfUpgraders = 4;
+    var minimumNumberOfHarvesters = 3;
+    var minumumNumberOfUpgraders = 10;
     var numberOfHarvesters = _.sum(Game.creeps, (c) => c.memory.role == 'Harvester');
     var numberOfUpgraders = _.sum(Game.creeps, (c) => c.memory.role == 'Upgrader');
     var name = undefined;
@@ -39,8 +40,6 @@ module.exports.loop = function () {
         name = Game.spawns.Spawn1.createCreep([WORK, CARRY, MOVE, MOVE], undefined, { role: 'Upgrader', working: false });
     }
 
-
-    if (!(name < 0)) {
-        console.log("Spawned new creep: " + name);
-    }
+   screepsplus.collect_stats()
+   Memory.stats.cpu.used = Game.cpu.getUsed();
 };
