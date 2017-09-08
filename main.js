@@ -1,7 +1,9 @@
 // import modules
 var roleHarvester = require('role.harvester');
 var roleUpgrader = require('role.upgrader');
-var screepsplus = require('screepsplus')
+var roleBuilder = require('role.builder');
+
+var screepsplus = require('screepsplus');
 
 module.exports.loop = function () {
     //clear memory
@@ -25,12 +27,17 @@ module.exports.loop = function () {
         else if (creep.memory.role == 'Upgrader') {
             roleUpgrader.run(creep);
         }
+        else if (creep.memory.role == 'Builder') {
+            roleBuilder.run(creep);
+        }
     }
 
     var minimumNumberOfHarvesters = 3;
-    var minumumNumberOfUpgraders = 10;
+    var minumumNumberOfUpgraders = 5;
+    var minumumNumberOfBuilders = 5;
     var numberOfHarvesters = _.sum(Game.creeps, (c) => c.memory.role == 'Harvester');
     var numberOfUpgraders = _.sum(Game.creeps, (c) => c.memory.role == 'Upgrader');
+    var numberOfBuilders = _.sum(Game.creeps, (c) => c.memory.role == 'Builder');
     var name = undefined;
 
     if (numberOfHarvesters < minimumNumberOfHarvesters) {
@@ -38,6 +45,11 @@ module.exports.loop = function () {
     }
     else if (numberOfUpgraders < minumumNumberOfUpgraders) {
         name = Game.spawns.Spawn1.createCreep([WORK, CARRY, MOVE, MOVE], undefined, { role: 'Upgrader', working: false });
+    }
+    else if (numberOfBuilders < minumumNumberOfBuilders) {
+        name = Game.spawns.Spawn1.createCreep([WORK, WORK, CARRY, MOVE], undefined, { role: 'Builder', working: false });
+    }
+    else {
     }
 
    screepsplus.collect_stats()
