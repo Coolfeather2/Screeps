@@ -14,7 +14,7 @@ module.exports = {
 
         // if creep is supposed to transfer energy to the spawn
         if (creep.memory.working == true) {
-            var structure = creep.pos.findClosestByPath(FIND_MY_STRUCTURES, { filter: (s) => s.energy < s.energyCapacity });
+            var structure = creep.pos.findClosestByPath(FIND_MY_STRUCTURES, { filter: (s) => (s.structureType == STRUCTURE_SPAWN || s.structureType == STRUCTURE_EXTENSION) && s.energy < s.energyCapacity });
 
             if (structure != undefined) {
                 // try to transfer energy, if the spawn is not in range

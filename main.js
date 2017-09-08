@@ -1,4 +1,5 @@
 // import modules
+require('prototype.spawn')();
 var roleHarvester = require('role.harvester');
 var roleUpgrader = require('role.upgrader');
 var roleBuilder = require('role.builder');
@@ -37,28 +38,50 @@ module.exports.loop = function () {
     }
 
     var minimumNumberOfHarvesters = 2;
-    var minumumNumberOfUpgraders = 5;
-    var minumumNumberOfBuilders = 5;
-    var minumumNumberOfRepairer = 2;
+    var minimumNumberOfUpgraders = 4;
+    var minimumNumberOfBuilders = 2;
+    var minimumNumberOfRepairers = 2;
+    
     var numberOfHarvesters = _.sum(Game.creeps, (c) => c.memory.role == 'Harvester');
     var numberOfUpgraders = _.sum(Game.creeps, (c) => c.memory.role == 'Upgrader');
     var numberOfBuilders = _.sum(Game.creeps, (c) => c.memory.role == 'Builder');
-    var numberOfRepairer = _.sum(Game.creeps, (c) => c.memory.role == 'Repairer');
+    var numberOfRepairers = _.sum(Game.creeps, (c) => c.memory.role == 'Repairer');
+    
     var name = undefined;
+    var energy = Game.spawns.Spawn1.room.energyCapacityAvailable;
+
 
     if (numberOfHarvesters < minimumNumberOfHarvesters) {
-        name = Game.spawns.Spawn1.createCreep([WORK, WORK, CARRY, MOVE], undefined, { role: 'Harvester', working: false });
+        // try to spawn one
+        name = Game.spawns.Spawn1.createCustomCreep(energy, 'Harvester');
+
+        // if spawning failed and we have no harvesters left
+        if (name == ERR_NOT_ENOUGH_ENERGY && numberOfHarvesters == 0) {
+            // spawn one with what is available
+            name = Game.spawns.Spawn1.createCustomCreep(
+                Game.spawns.Spawn1.room.energyAvailable, 'Harvester');
+        }
     }
-    else if (numberOfUpgraders < minumumNumberOfUpgraders) {
-        name = Game.spawns.Spawn1.createCreep([WORK, CARRY, MOVE, MOVE], undefined, { role: 'Upgrader', working: false });
+    // if not enough upgraders
+    else if (numberOfUpgraders < minimumNumberOfUpgraders) {
+        // try to spawn one
+        name = Game.spawns.Spawn1.createCustomCreep(energy, 'Upgrader');
     }
-    else if (numberOfRepairer < minumumNumberOfRepairer) {
-        name = Game.spawns.Spawn1.createCreep([WORK, WORK, CARRY, MOVE], undefined, { role: 'Repairer', working: false });
+    // if not enough repairers
+    else if (numberOfRepairers < minimumNumberOfRepairers) {
+        // try to spawn one
+        name = Game.spawns.Spawn1.createCustomCreep(energy, 'Repairer');
     }
-    else if (numberOfBuilders < minumumNumberOfBuilders) {
-        name = Game.spawns.Spawn1.createCreep([WORK, WORK, CARRY, MOVE], undefined, { role: 'Builder', working: false });
+    // if not enough builders
+    else if (numberOfBuilders < minimumNumberOfBuilders) {
+        // try to spawn one
+        name = Game.spawns.Spawn1.createCustomCreep(energy, 'Builder');
     }
     else {
+    }
+    
+        if (!(name < 0)) {
+        console.log("Spawned new creep: " + name);
     }
 
    screepsplus.collect_stats()
