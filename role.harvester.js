@@ -14,10 +14,14 @@ module.exports = {
 
         // if creep is supposed to transfer energy to the spawn
         if (creep.memory.working == true) {
-            // try to transfer energy, if the spawn is not in range
-            if (creep.transfer(Game.spawns.Spawn1, RESOURCE_ENERGY) == ERR_NOT_IN_RANGE) {
-                // move towards the spawn
-                creep.moveTo(Game.spawns.Spawn1);
+            var structure = creep.pos.findClosestByPath(FIND_MY_STRUCTURES, { filter: (s) => s.energy < s.energyCapacity });
+
+            if (structure != undefined) {
+                // try to transfer energy, if the spawn is not in range
+                if (creep.transfer(structure, RESOURCE_ENERGY) == ERR_NOT_IN_RANGE) {
+                    // move towards the spawn
+                    creep.moveTo(structure);
+                }
             }
         }
         // if creep is supposed to harvest energy from source
