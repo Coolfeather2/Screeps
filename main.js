@@ -4,6 +4,7 @@ var roleHarvester = require('role.harvester');
 var roleUpgrader = require('role.upgrader');
 var roleBuilder = require('role.builder');
 var roleRepairer = require('role.repairer');
+var roleWallRepairers = require('role.wallRepairers');
 
 var screepsplus = require('screepsplus');
 
@@ -35,17 +36,31 @@ module.exports.loop = function () {
         else if (creep.memory.role == 'Repairer') {
             roleRepairer.run(creep);
         }
+        else if (creep.memory.role == 'Waller') {
+            roleWallRepairers.run(creep);
+        }
+    }
+
+    //tower attack
+    var towers = Game.rooms.W49S23.find(FIND_STRUCTURES, { filter: (s) => s.structureType == STRUCTURE_TOWER });
+    for (let tower of towers) {
+        var target = tower.pos.findClosestByRange(FIND_HOSTILE_CREEPS);
+        if (target != undefined) {
+            tower.attack(target);
+        }
     }
 
     var minimumNumberOfHarvesters = 2;
-    var minimumNumberOfUpgraders = 4;
+    var minimumNumberOfUpgraders = 2;
     var minimumNumberOfBuilders = 2;
-    var minimumNumberOfRepairers = 2;
+    var minimumNumberOfRepairers = 1;
+    var minimumNumberOfWallRepairers = 1;
     
     var numberOfHarvesters = _.sum(Game.creeps, (c) => c.memory.role == 'Harvester');
     var numberOfUpgraders = _.sum(Game.creeps, (c) => c.memory.role == 'Upgrader');
     var numberOfBuilders = _.sum(Game.creeps, (c) => c.memory.role == 'Builder');
     var numberOfRepairers = _.sum(Game.creeps, (c) => c.memory.role == 'Repairer');
+    var numberOfWallRepairers = _.sum(Game.creeps, (c) => c.memory.role == 'WallRepairers');
     
     var name = undefined;
     var energy = Game.spawns.Spawn1.room.energyCapacityAvailable;
@@ -76,12 +91,12 @@ module.exports.loop = function () {
     else if (numberOfBuilders < minimumNumberOfBuilders) {
         // try to spawn one
         name = Game.spawns.Spawn1.createCustomCreep(energy, 'Builder');
+    // if not enough Wallers
+    } else if (numberOfWallRepairers < minimumNumberOfWallRepairers) {
+        // try to spawn one
+        name = Game.spawns.Spawn1.createCustomCreep(energy, 'WallRepairers');
     }
     else {
-    }
-    
-        if (!(name < 0)) {
-        console.log("Spawned new creep: " + name);
     }
 
    screepsplus.collect_stats()
