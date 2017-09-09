@@ -1,4 +1,4 @@
-var roleUpgrader = require('role.upgrader');
+var roleUpgrader = require('role.Upgrader');
 
 module.exports = {
     // a function to run the logic for this role
