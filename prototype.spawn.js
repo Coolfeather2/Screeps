@@ -18,4 +18,26 @@ module.exports = function() {
             // create creep with the created body and the given role
             return this.createCreep(body, undefined, { role: roleName, working: false });
         };
+    StructureSpawn.prototype.createLongDistanceHarvester =
+        function (energy, numberOfWorkParts, home, target, sourceID) {
+            // create a body with the specified number of WORK parts and one MOVE part per non-MOVE part
+            var body = [];
+            for (let i = 0; i < numberOfWorkParts; i++) {
+                body.push(WORK);
+            }
+
+            // 150 = 100 (cost of WORK) + 50 (cost of MOVE)
+            energy -= 150 * numberOfWorkParts;
+
+            var numberOfParts = Math.floor(energy / 100);
+            for (let i = 0; i < numberOfParts; i++) {
+                body.push(CARRY);
+            }
+            for (let i = 0; i < numberOfParts + numberOfWorkParts; i++) {
+                body.push(MOVE);
+            }
+            console.log(body)
+            // create creep with the created body
+            return this.createCreep(body, undefined, { role: 'LongDistanceHarvester', home: home, target: target, sourceID: sourceID, working: false });
+        };
 };
