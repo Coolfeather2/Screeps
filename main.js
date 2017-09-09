@@ -4,7 +4,7 @@ var roleHarvester = require('role.harvester');
 var roleUpgrader = require('role.upgrader');
 var roleBuilder = require('role.builder');
 var roleRepairer = require('role.repairer');
-var roleWallRepairers = require('role.wallRepairers');
+var roleWallRepairer = require('role.wallRepairer');
 
 var screepsplus = require('screepsplus');
 
@@ -36,8 +36,8 @@ module.exports.loop = function () {
         else if (creep.memory.role == 'Repairer') {
             roleRepairer.run(creep);
         }
-        else if (creep.memory.role == 'Waller') {
-            roleWallRepairers.run(creep);
+        else if (creep.memory.role == 'WallRepairer') {
+            roleWallRepairer.run(creep);
         }
     }
 
@@ -94,7 +94,7 @@ module.exports.loop = function () {
     // if not enough Wallers
     } else if (numberOfWallRepairers < minimumNumberOfWallRepairers) {
         // try to spawn one
-        name = Game.spawns.Spawn1.createCustomCreep(energy, 'WallRepairers');
+        name = Game.spawns.Spawn1.createCustomCreep(energy, 'WallRepairer');
     }
     else {
     }
