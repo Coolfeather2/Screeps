@@ -20,8 +20,8 @@
 
 
 "use strict";
-const resources = require('resources');
-const cb = require('callback');
+const resources = require('stats.resources');
+const cb = require('stats.callback');
 
 global.stats_callbacks = new cb.Callback();
 

@@ -36,7 +36,6 @@ module.exports = function() {
             for (let i = 0; i < numberOfParts + numberOfWorkParts; i++) {
                 body.push(MOVE);
             }
-            console.log(body)
             // create creep with the created body
             return this.createCreep(body, undefined, { role: 'LongDistanceHarvester', home: home, target: target, sourceID: sourceID, working: false });
         };

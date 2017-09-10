@@ -7,7 +7,7 @@ var roleRepairer = require('role.Repairer');
 var roleWallRepairer = require('role.WallRepairer');
 var roleLongDistanceHarvester = require('role.LongDistanceHarvester');
 
-var screepsplus = require('screepsplus');
+var screepsplus = require('stats.screepsplus');
 
 var home = 'W49S23'
 
@@ -87,6 +87,10 @@ module.exports.loop = function () {
         // try to spawn one
         Game.spawns.Spawn1.createCustomCreep(energy, 'Upgrader');
     }
+    else if (numberOfLongDistanceHarvesters < minimumNumberOfLongDistanceHarvesters) {
+        // try to spawn one
+        Game.spawns.Spawn1.createLongDistanceHarvester(energy, 5, home, 'W48S23', 0);
+    } 
     // if not enough repairers
     else if (numberOfRepairers < minimumNumberOfRepairers) {
         // try to spawn one
@@ -101,10 +105,6 @@ module.exports.loop = function () {
         // try to spawn one
         Game.spawns.Spawn1.createCustomCreep(energy, 'WallRepairer');
     }
-    else if (numberOfLongDistanceHarvesters < minimumNumberOfLongDistanceHarvesters) {
-        // try to spawn one
-        Game.spawns.Spawn1.createLongDistanceHarvester(energy, 5, home, 'W48S23', 0);
-    }   
     else {
     }
 
