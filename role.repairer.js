@@ -21,7 +21,7 @@ module.exports = {
             if (structure != undefined) {
                 if (creep.repair(structure) == ERR_NOT_IN_RANGE) {
                     // move towards the spawn
-                    creep.moveTo(structure);
+                    creep.travelTo(structure);
                 }
             }
             else {
@@ -35,7 +35,7 @@ module.exports = {
             // try to harvest energy, if the source is not in range
             if (creep.harvest(source) == ERR_NOT_IN_RANGE) {
                 // move towards the source
-                creep.moveTo(source);
+                creep.travelTo(source);
             }
         }
     }
