@@ -1,5 +1,6 @@
 // import modules
 require('prototype.spawn')();
+var Traveler = require('traveler');
 var roleHarvester = require('role.Harvester');
 var roleUpgrader = require('role.Upgrader');
 var roleBuilder = require('role.Builder');
