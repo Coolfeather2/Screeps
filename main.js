@@ -64,7 +64,7 @@ module.exports.loop = function () {
 
     var minimumNumberOfHarvesters = 1;
     var minimumNumberOfUpgraders = 1;
-    var minimumNumberOfBuilders = 1;
+    var minimumNumberOfBuilders = 2;
     var minimumNumberOfRepairers = 1;
     var minimumNumberOfWallRepairers = 1;
     var minimumNumberOfLongDistanceHarvesters = 2;
@@ -131,8 +131,7 @@ module.exports.loop = function () {
 //        console.log("WallRepairers : " + numberOfWallRepairers);
 //        console.log("Long Harvester: " + numberOfLongDistanceHarvesters);
 //        console.log('----------------------------------------');
-//    }
-
-   screepsplus.collect_stats()
-   Memory.stats.cpu.used = Game.cpu.getUsed();
+    //    }
+    screepsplus.collect_stats()
+    Memory.stats.cpu.used = Game.cpu.getUsed();
 };
