@@ -17,7 +17,7 @@ module.exports = {
         // if creep is supposed to transfer energy to the spawn
         if (creep.memory.working == true) {
             // try to transfer energy, if the spawn is not in range
-            var walls = creep.room.find(FIND_STRUCTURES, { filter: (s) => s.structureType == STRUCTURE_WALL });
+            var walls = creep.room.find(FIND_STRUCTURES, { filter: (s) => s.structureType == STRUCTURE_WALL || s.structureType == STRUCTURE_RAMPART });
             var target = undefined;
             // loop with increasing percentages
             for (let percentage = 0.0001; percentage <= 1; percentage = percentage + 0.0001) {
