@@ -39,4 +39,8 @@ module.exports = function() {
             // create creep with the created body
             return this.createCreep(body, undefined, { role: 'LongDistanceHarvester', home: home, target: target, sourceID: sourceID, working: false });
         };
+    StructureSpawn.prototype.createClaimer =
+        function (target) {
+            return this.createCreep([CLAIM, MOVE], undefined, { role: 'Claimer', target: target })
+        };
 };
