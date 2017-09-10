@@ -41,6 +41,6 @@ module.exports = function() {
         };
     StructureSpawn.prototype.createClaimer =
         function (target) {
-            return this.createCreep([CLAIM, MOVE], undefined, { role: 'Claimer', target: target })
+            return this.createCreep([CLAIM, CLAIM, MOVE], undefined, { role: 'Claimer', target: target })
         };
 };
