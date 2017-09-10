@@ -55,11 +55,11 @@ module.exports.loop = function () {
     }
 
     var minimumNumberOfHarvesters = 1;
-    var minimumNumberOfUpgraders = 2;
+    var minimumNumberOfUpgraders = 1;
     var minimumNumberOfBuilders = 1;
     var minimumNumberOfRepairers = 1;
     var minimumNumberOfWallRepairers = 1;
-    var minimumNumberOfLongDistanceHarvesters = 1;
+    var minimumNumberOfLongDistanceHarvesters = 2;
     
     var numberOfHarvesters = _.sum(Game.creeps, (c) => c.memory.role == 'Harvester');
     var numberOfUpgraders = _.sum(Game.creeps, (c) => c.memory.role == 'Upgrader');

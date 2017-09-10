@@ -1,3 +1,5 @@
+var roleUpgrader = require('role.Upgrader');
+
 module.exports = {
     // a function to run the logic for this role
     run: function(creep) {
@@ -23,6 +25,9 @@ module.exports = {
                         // move towards the spawn
                         creep.moveTo(structure);
                     }
+                }
+                else {
+                    roleUpgrader.run(creep);
                 }
             }
             else {
