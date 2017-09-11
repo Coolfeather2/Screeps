@@ -41,6 +41,19 @@ module.exports = function() {
         };
     StructureSpawn.prototype.createClaimer =
         function (target) {
-            return this.createCreep([CLAIM, CLAIM, MOVE], undefined, { role: 'Claimer', target: target })
+            return this.createCreep([CLAIM, CLAIM, MOVE, MOVE], undefined, { role: 'Claimer', target: target })
+        };
+    StructureSpawn.prototype.createMiner =
+        function (energy, sourceID) {
+            energy -= 50;
+
+            var numberOfParts = Math.floor(energy / 100);
+            for (let i = 0; i < numberOfParts; i++) {
+                body.push(WORK);
+            }
+
+            body.push(MOVE)
+
+            return this.createCreep(body, undefined, { role: 'Miner', sourceID: sourceID })
         };
 };
