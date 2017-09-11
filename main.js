@@ -69,13 +69,12 @@ module.exports.loop = function () {
     var minimumNumberOfWallRepairers = 1;
     var minimumNumberOfLongDistanceHarvesters = 0;
     
-    var creepsByRole = _.countBy(Game.creeps, 'memory.role');
-    var numberOfHarvesters = creepsByRole['Harvester'] || 0; 
-    var numberOfUpgraders = creepsByRole['Upgrader'] || 0; 
-    var numberOfBuilders = creepsByRole['Builder'] || 0; 
-    var numberOfRepairers = creepsByRole['Repairer'] || 0; 
-    var numberOfWallRepairers = creepsByRole['WallRepairer'] || 0; 
-    var numberOfLongDistanceHarvesters = creepsByRole['LongDistanceHarvester'] || 0;
+    var numberOfHarvesters = _.sum(Game.creeps, (c) => c.memory.role == 'Harvester');
+    var numberOfUpgraders = _.sum(Game.creeps, (c) => c.memory.role == 'Upgrader');
+    var numberOfBuilders = _.sum(Game.creeps, (c) => c.memory.role == 'Builder');
+    var numberOfRepairers = _.sum(Game.creeps, (c) => c.memory.role == 'Repairer');
+    var numberOfWallRepairers = _.sum(Game.creeps, (c) => c.memory.role == 'WallRepairer');
+    var numberOfLongDistanceHarvesters = _.sum(Game.creeps, (c) => c.memory.role == 'LongDistanceHarvester');
     
     var energy = Game.spawns.Spawn1.room.energyCapacityAvailable;
     var name;
@@ -123,12 +122,12 @@ module.exports.loop = function () {
     }
 
     if (name && typeof name === 'string') {   
-        var numberOfHarvesters = creepsByRole['Harvester'] || 0;
-        var numberOfUpgraders = creepsByRole['Upgrader'] || 0;
-        var numberOfBuilders = creepsByRole['Builder'] || 0;
-        var numberOfRepairers = creepsByRole['Repairer'] || 0;
-        var numberOfWallRepairers = creepsByRole['WallRepairer'] || 0;
-        var numberOfLongDistanceHarvesters = creepsByRole['LongDistanceHarvester'] || 0;
+        let numberOfHarvesters = creepsByRole['Harvester'] || 0;
+        let numberOfUpgraders = creepsByRole['Upgrader'] || 0;
+        let numberOfBuilders = creepsByRole['Builder'] || 0;
+        let numberOfRepairers = creepsByRole['Repairer'] || 0;
+        let numberOfWallRepairers = creepsByRole['WallRepairer'] || 0;
+        let numberOfLongDistanceHarvesters = creepsByRole['LongDistanceHarvester'] || 0;
 
         console.log('----------------------------------------');
         console.log("Spawned new creep: " + name + " (" + Game.creeps[name].memory.role + ")");
