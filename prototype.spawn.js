@@ -27,7 +27,7 @@ module.exports = function() {
             }
 
             // 150 = 100 (cost of WORK) + 50 (cost of MOVE)
-            energy -= 150 * numberOfWorkParts;
+            energy -= (BODYPART_COST[WORK] + BODYPART_COST[MOVE]) * numberOfWorkParts;
 
             var numberOfParts = Math.floor(energy / 100);
             for (let i = 0; i < numberOfParts; i++) {
