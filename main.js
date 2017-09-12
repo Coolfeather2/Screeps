@@ -115,8 +115,7 @@ module.exports.loop = function () {
                 if (numberOfCarriers < spawn.memory.minCarriers) {
                     name = spawn.createCarrier(300);
                 }
-                else if (spawn.memory.claimRoom != undefined && ((BODYPART_COST[CLAIM] + BODYPART_COST[WORK]) * 2 <= energy)) {
-                    console.log(energy)
+                else if (spawn.memory.claimRoom != undefined && ((BODYPART_COST[CLAIM] + BODYPART_COST[MOVE]) * 2 <= energy)) {
                     name = spawn.createClaimer(spawn.memory.claimRoom);
                     if (!(name < 0)) {
                         delete spawn.memory.claimRoom;
