@@ -1,6 +1,6 @@
 module.exports = {
     // a function to run the logic for this role
-    run: function(creep) {
+    run: function (creep) {
         let source = Game.getObjectById(creep.memory.sourceID);
         let container = source.pos.findInRange(FIND_STRUCTURES, 1, { filter: s => s.structureType == STRUCTURE_CONTAINER })[0];
 

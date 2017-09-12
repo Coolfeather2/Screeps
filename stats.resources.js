@@ -101,7 +101,7 @@ function summarize_room_internal(room) {
     const num_enemies = enemy_creeps ? enemy_creeps.length : 0;
     const spawns = room.find(FIND_MY_SPAWNS);
     const num_spawns = spawns ? spawns.length : 0;
-    const spawns_spawning =  _.sum(spawns, s => s.spawning ? 1 : 0);
+    const spawns_spawning = _.sum(spawns, s => s.spawning ? 1 : 0);
     const towers = room.find(FIND_STRUCTURES, { filter: s => s.structureType == STRUCTURE_TOWER && s.my });
     const num_towers = towers ? towers.length : 0;
     const tower_energy = _.sum(towers, t => t.energy);
@@ -119,7 +119,7 @@ function summarize_room_internal(room) {
     const structure_types = new Set(room.find(FIND_STRUCTURES).map(s => s.structureType));
     const structure_info = {};
     for (const s of structure_types) {
-        const ss = room.find(FIND_STRUCTURES, {filter: str => str.structureType == s});
+        const ss = room.find(FIND_STRUCTURES, { filter: str => str.structureType == s });
         structure_info[s] = {
             count: ss.length,
             min_hits: _.min(ss, 'hits').hits,
@@ -195,7 +195,7 @@ function summarize_room_internal(room) {
         ground_resources: reduced_resources,
         num_source_containers,
     };
-    
+
     // console.log('Room ' + room.name + ': ' + JSON.stringify(retval));
     return retval;
 } // summarize_room

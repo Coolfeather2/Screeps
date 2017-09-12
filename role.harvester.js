@@ -2,7 +2,7 @@ var roleUpgrader = require('role.Upgrader');
 
 module.exports = {
     // a function to run the logic for this role
-    run: function(creep) {
+    run: function (creep) {
         // if creep is bringing energy to the spawn but has no energy left
         if (creep.memory.working == true && creep.carry.energy == 0) {
             // switch state

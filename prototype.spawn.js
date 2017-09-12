@@ -1,7 +1,7 @@
-module.exports = function() {
+module.exports = function () {
     // create a new function for StructureSpawn
     StructureSpawn.prototype.createCustomCreep =
-        function(energy, roleName) {
+        function (energy, roleName) {
             // create a balanced body as big as possible with the given energy
             var numberOfParts = Math.floor(energy / (BODYPART_COST[WORK] + BODYPART_COST[CARRY] + BODYPART_COST[MOVE]));
             var body = [];
@@ -47,7 +47,7 @@ module.exports = function() {
             var body = [];
             energy -= BODYPART_COST[MOVE];
 
-            var numberOfParts = Math.floor(energy / BODYPART_COST[WORK]);
+            var numberOfParts = (SOURCE_ENERGY_CAPACITY / ENERGY_REGEN_TIME / 2);
             for (let i = 0; i < numberOfParts; i++) {
                 body.push(WORK);
             }

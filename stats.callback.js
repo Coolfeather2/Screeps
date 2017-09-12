@@ -6,26 +6,26 @@
 function Callback() {
     this.handlers = [];  // observers
 }
- 
+
 Callback.prototype = {
- 
-    subscribe: function(fn) {
+
+    subscribe: function (fn) {
         this.handlers.push(fn);
     },
- 
-    unsubscribe: function(fn) {
+
+    unsubscribe: function (fn) {
         this.handlers = this.handlers.filter(
-            function(item) {
+            function (item) {
                 if (item !== fn) {
                     return item;
                 }
             }
         );
     },
- 
-    fire: function(o, thisObj) {
+
+    fire: function (o, thisObj) {
         // TODO: Put error handling around the call?
-        this.handlers.forEach(function(item) {
+        this.handlers.forEach(function (item) {
             try {
                 item.call(thisObj, o);
             } catch (err) {
@@ -34,7 +34,7 @@ Callback.prototype = {
         });
     }
 }
- 
+
 module.exports = {
     Callback
 };
