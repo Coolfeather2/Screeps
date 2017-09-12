@@ -5,6 +5,8 @@ require('prototype.spawn')();
 
 var Traveler = require('traveler');
 var roleHarvester = require('role.Harvester');
+var roleMiner = require('role.Miner');
+var roleCarrier = require('role.Carrier')
 var roleUpgrader = require('role.Upgrader');
 var roleBuilder = require('role.Builder');
 var roleRepairer = require('role.Repairer');
@@ -23,13 +25,20 @@ module.exports.loop = function () {
             delete Memory.creeps[name];
         }
     }
-    
-    
+
+
+
     for (let name in Game.creeps) {
         var creep = Game.creeps[name];
 
         if (creep.memory.role == 'Harvester') {
             roleHarvester.run(creep);
+        }
+        else if (creep.memory.role == 'Miner') {
+            roleMiner.run(creep);
+        }
+        else if (creep.memory.role == 'Carrier') {
+            roleCarrier.run(creep);
         }
         else if (creep.memory.role == 'Upgrader') {
             roleUpgrader.run(creep);
@@ -51,99 +60,53 @@ module.exports.loop = function () {
         }
     }
 
-    var towers = _.filter(Game.structures, (s) => s.structureType == STRUCTURE_TOWER );
-    for (let tower of towers) {
-        var target = tower.pos.findClosestByRange(FIND_HOSTILE_CREEPS);
-        if (target != undefined) {
-            tower.attack(target);
-        }
-    }
 
-    var minimumNumberOfHarvesters = 1;
-    var minimumNumberOfUpgraders = 2;
-    var minimumNumberOfBuilders = 1;
-    var minimumNumberOfRepairers = 1;
-    var minimumNumberOfWallRepairers = 1;
-    var minimumNumberOfLongDistanceHarvesters = 3;
 
-    var creepsByRole = _.countBy(Game.creeps, 'memory.role');
-    var numberOfHarvesters = creepsByRole['Harvester'] || 0;
-    var numberOfUpgraders = creepsByRole['Upgrader'] || 0;
-    var numberOfBuilders = creepsByRole['Builder'] || 0;
-    var numberOfRepairers = creepsByRole['Repairer'] || 0;
-    var numberOfWallRepairers = creepsByRole['WallRepairer'] || 0;
-    var numberOfLongDistanceHarvesters = creepsByRole['LongDistanceHarvester'] || 0;
-   
-    var energy = Game.spawns.Spawn1.room.energyCapacityAvailable;
-    var name;
-
-    if (numberOfHarvesters < minimumNumberOfHarvesters) {
-        name = Game.spawns.Spawn1.createCustomCreep(energy, 'Harvester');
-        if (name == ERR_NOT_ENOUGH_ENERGY && numberOfHarvesters == 0) {
-            name = Game.spawns.Spawn1.createCustomCreep(Game.spawns.Spawn1.room.energyAvailable, 'Harvester');
-        }
-    }
-    else if (Game.spawns.Spawn1.memory.claimRoom != undefined) {
-        name = Game.spawns.Spawn1.createClaimer(Game.spawns.Spawn1.memory.claimRoom);
-        if (!(name < 0)) {
-            delete Game.spawns.Spawn1.memory.claimRoom;
-        }
-    }
-    else if (numberOfLongDistanceHarvesters < minimumNumberOfLongDistanceHarvesters) {
-        name = Game.spawns.Spawn1.createLongDistanceHarvester(energy, 5, home, 'W48S23', 0);
-    } 
-    else if (numberOfUpgraders < minimumNumberOfUpgraders) {
-        name = Game.spawns.Spawn1.createCustomCreep(energy, 'Upgrader');
-    }
-    else if (numberOfRepairers < minimumNumberOfRepairers) {
-        name = Game.spawns.Spawn1.createCustomCreep(energy, 'Repairer');
-    }
-    else if (numberOfBuilders < minimumNumberOfBuilders) {
-        name = Game.spawns.Spawn1.createCustomCreep(energy, 'Builder');
-    } else if (numberOfWallRepairers < minimumNumberOfWallRepairers) {
-        name = Game.spawns.Spawn1.createCustomCreep(energy, 'WallRepairer');
-    }
-    else {
-        name = -1
-    }
-
-/**
     for (let spawnName in Game.spawns) {
-        let spawn = Game.spawn[spawnName];
+        let spawn = Game.spawns[spawnName];
         let creepsInRoom = spawn.room.find(FIND_MY_CREEPS)
 
         var energy = spawn.room.energyCapacityAvailable;
-        var name;
+        var name = undefined;
 
-        var creepsByRole = _.countBy(creepsInRoom, 'memory.role');
-        var numberOfHarvesters = creepsByRole['Harvester'] || 0;
-        var numberOfMiners = creepsByRole['Miner'] || 0;
-        var numberOfTransferrers = creepsByRole['Transferrer'] || 0;
-        var numberOfUpgraders = creepsByRole['Upgrader'] || 0;
-        var numberOfBuilders = creepsByRole['Builder'] || 0;
-        var numberOfRepairers = creepsByRole['Repairer'] || 0;
-        var numberOfWallRepairers = creepsByRole['WallRepairer'] || 0;
-        var numberOfLongDistanceHarvesters = creepsByRole['LongDistanceHarvester'] || 0;
+        var numberOfHarvesters = _.sum(creepsInRoom, (c) => c.memory.role == 'Harvester');
+        var numberOfMiners = _.sum(creepsInRoom, (c) => c.memory.role == 'Miner');
+        var numberOfCarriers = _.sum(creepsInRoom, (c) => c.memory.role == 'Carrier');
+        var numberOfUpgraders = _.sum(creepsInRoom, (c) => c.memory.role == 'Upgrader');
+        var numberOfBuilders = _.sum(creepsInRoom, (c) => c.memory.role == 'Builder');
+        var numberOfRepairers = _.sum(creepsInRoom, (c) => c.memory.role == 'Repairer');
+        var numberOfWallRepairers = _.sum(creepsInRoom, (c) => c.memory.role == 'WallRepairer');
+        var numberOfLongDistanceHarvesters = _.sum(Game.creeps, (c) => c.memory.role == 'LongDistanceHarvester')
 
-        for (let source of spawn.room.find(FIND_SOURCES)) {
-            if (!_.some(creepsInRoom, c => c.memory.role == 'Miner' && c.memory.sourceID == source.id)) {
-                let containers = source.pos.findInRange(FIND_STRUCTURES, 1, { filter: s => s.structureType == STRUCTURE_CONTAINER });
-                if (containers.length > 0) {
-                    name = spawn.createMiner(energy, source.id);
-                    break;
+        if (numberOfHarvesters == 0 && (numberOfMiners == 0 || numberOfCarriers == 0)) {
+            if (numberOfMiners > 0) {
+                name = spawn.createCarrier(spawn.room.energyAvailable);
+            }
+            else {
+                name = spawn.createCustomCreep(spawn.room.energyAvailable, 'Harvester');
+
+            }
+        }
+        else {
+            for (let source of spawn.room.find(FIND_SOURCES)) {
+                if (!_.some(creepsInRoom, c => c.memory.role == 'Miner' && c.memory.sourceID == source.id)) {
+                    let containers = source.pos.findInRange(FIND_STRUCTURES, 1, { filter: s => s.structureType == STRUCTURE_CONTAINER });
+                    if (containers.length > 0) {
+                        name = spawn.createMiner(energy, source.id);
+                        break;
+                    }
                 }
             }
         }
         if (name == undefined) {
-            if (numberOfHarvesters < spawns.memory.minHarvesters) {
+            if (numberOfHarvesters < spawn.memory.minHarvesters) {
                 name = spawn.createCustomCreep(energy, 'Harvester');
-
-                // if spawning failed and we have no harvesters left
-                if (name == ERR_NOT_ENOUGH_ENERGY && numberOfHarvesters == 0) {
-                    name = spawn.createCustomCreep(spawn.room.energyAvailable, 'Harvester');
-                }
             }
-            else if (spawn.memory.claimRoom != undefined) {
+            if (numberOfCarriers < spawn.memory.minCarriers) {
+                name = spawn.createCarrier(300);
+            }
+            else if (spawn.memory.claimRoom != undefined && ((BODYPART_COST[CLAIM] + BODYPART_COST[WORK]) * 2 <= energy)) {
+                console.log(energy)
                 name = spawn.createClaimer(spawn.memory.claimRoom);
                 if (!(name < 0)) {
                     delete spawn.memory.claimRoom;
@@ -164,31 +127,34 @@ module.exports.loop = function () {
                 name = spawn.createCustomCreep(energy, 'WallRepairer');
             }
             else {
+                name = -1;
             }
         }
-    }
-**/
+        if (!(name < 0)) {
+            var numberOfHarvesters = _.sum(creepsInRoom, (c) => c.memory.role == 'Harvester');
+            var numberOfMiners = _.sum(creepsInRoom, (c) => c.memory.role == 'Miner');
+            var numberOfCarriers = _.sum(creepsInRoom, (c) => c.memory.role == 'Carrier');
+            var numberOfUpgraders = _.sum(creepsInRoom, (c) => c.memory.role == 'Upgrader');
+            var numberOfBuilders = _.sum(creepsInRoom, (c) => c.memory.role == 'Builder');
+            var numberOfRepairers = _.sum(creepsInRoom, (c) => c.memory.role == 'Repairer');
+            var numberOfWallRepairers = _.sum(creepsInRoom, (c) => c.memory.role == 'WallRepairer');
+            var numberOfLongDistanceHarvesters = _.sum(Game.creeps, (c) => c.memory.role == 'LongDistanceHarvester')
 
-    if (!(name<0)){
-        var creepsByRole = _.countBy(Game.creeps, 'memory.role');
-        var numberOfHarvesters = creepsByRole['Harvester'] || 0;
-        var numberOfUpgraders = creepsByRole['Upgrader'] || 0;
-        var numberOfBuilders = creepsByRole['Builder'] || 0;
-        var numberOfRepairers = creepsByRole['Repairer'] || 0;
-        var numberOfWallRepairers = creepsByRole['WallRepairer'] || 0;
-        var numberOfLongDistanceHarvesters = creepsByRole['LongDistanceHarvester'] || 0;
-
-        console.log('----------------------------------------');
-        console.log(/**spawnName +**/" spawned new creep: " + name + " (" + Game.creeps[name].memory.role + ")");
-        console.log("Harvesters    : " + numberOfHarvesters + "/" + minimumNumberOfHarvesters);
-        console.log("Upgraders     : " + numberOfUpgraders + "/" + minimumNumberOfUpgraders);
-        console.log("Builders      : " + numberOfBuilders + "/" + minimumNumberOfBuilders);
-        console.log("Repairers     : " + numberOfRepairers + "/" + minimumNumberOfHarvesters);
-        console.log("WallRepairers : " + numberOfWallRepairers + "/" + minimumNumberOfRepairers);
-        console.log("Long Harvester: " + numberOfLongDistanceHarvesters + "/" + minimumNumberOfLongDistanceHarvesters);
-        console.log('----------------------------------------');
+            console.log('----------------------------------------');
+            console.log(spawnName + " spawned new creep: " + name + " (" + Game.creeps[name].memory.role + ")");
+            console.log("Harvesters    : " + numberOfHarvesters + "/" + spawn.memory.minHarvesters);
+            console.log("Miners        : " + numberOfMiners);
+            console.log("Carriers      : " + numberOfCarriers);
+            console.log("Upgraders     : " + numberOfUpgraders + "/" + spawn.memory.minUpgraders);
+            console.log("Builders      : " + numberOfBuilders + "/" + spawn.memory.minBuilders);
+            console.log("Repairers     : " + numberOfRepairers + "/" + spawn.memory.minRepairers);
+            console.log("WallRepairers : " + numberOfWallRepairers + "/" + spawn.memory.minWallRepairers);
+            console.log("Long Harvester: " + numberOfLongDistanceHarvesters + "/" + spawn.memory.LongHarvesters.min);
+            console.log('----------------------------------------');
+        }
     }
 
     screepsplus.collect_stats()
     Memory.stats.cpu.used = Game.cpu.getUsed();
+
 };
