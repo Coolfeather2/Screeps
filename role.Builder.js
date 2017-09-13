@@ -6,6 +6,7 @@ module.exports = {
         if (creep.memory.target != undefined && creep.room.name != creep.memory.target) {
             var exit = creep.room.findExitTo(creep.memory.target);
             creep.travelTo(creep.pos.findClosestByRange(exit));
+            return;
         }
         // if creep is bringing energy to the spawn but has no energy left
         if (creep.memory.working == true && creep.carry.energy == 0) {
@@ -35,7 +36,7 @@ module.exports = {
         // if creep is supposed to harvest energy from source
         else {
             // find closest source
-            var container = creep.pos.findClosestByPath(FIND_STRUCTURES, { filter: s => s.structureType == STRUCTURE_CONTAINER && s.store[RESOURCE_ENERGY] > 0 });
+            var container = creep.pos.findClosestByPath(FIND_STRUCTURES, { filter: s => (s.structureType == STRUCTURE_STORAGE || s.structureType == STRUCTURE_CONTAINER) && s.store[RESOURCE_ENERGY] > 0 });
             // try to harvest energy, if the source is not in range
             if (container != undefined) {
                 if (creep.withdraw(container, RESOURCE_ENERGY) == ERR_NOT_IN_RANGE) {
