@@ -34,42 +34,7 @@
         }
         // if creep is supposed to harvest energy from source
         else {
-            // find closest source
-            var container = creep.pos.findClosestByPath(FIND_STRUCTURES, { filter: s => (s.structureType == STRUCTURE_STORAGE || s.structureType == STRUCTURE_CONTAINER) && s.store[RESOURCE_ENERGY] > 0 });
-            // try to harvest energy, if the source is not in range
-            if (container != undefined) {
-                let action = creep.withdraw(container, RESOURCE_ENERGY);
-                switch (action) {
-                    case OK:
-                        creep.say('📤 Collect', true);
-                        break;
-                    case ERR_NOT_IN_RANGE:
-                        creep.travelTo(container);
-                        break;
-                    case ERR_BUSY:
-                        break;
-                    default:
-                        console.log(`unknown result from (${creep}).withdraw(${container}): ${action}`);
-                }
-            }
-            else {
-                // find closest source
-                var source = creep.pos.findClosestByPath(FIND_SOURCES_ACTIVE);
-                // try to harvest energy, if the source is not in range
-                let action = creep.harvest(source);
-                switch (action) {
-                    case OK:
-                        creep.say('⛏ Harvest', true);
-                        break;
-                    case ERR_NOT_IN_RANGE:
-                        creep.travelTo(source);
-                        break;
-                    case ERR_BUSY:
-                        break;
-                    default:
-                        console.log(`unknown result from (${creep}).harvest(${source}): ${action}`);
-                }
-            }
+            creep.GetEnergy(true, false)
         }
     }
 };
