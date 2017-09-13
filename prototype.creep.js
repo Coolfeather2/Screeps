@@ -1,4 +1,4 @@
-﻿var roles = {
+var roles = {
     Harvester: require('role.Harvester'),
     Miner: require('role.Miner'),
     Carrier: require('role.Carrier'),
