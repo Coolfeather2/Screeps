@@ -1,4 +1,4 @@
-var roleUpgrader = require('role.Upgrader');
+﻿var roleUpgrader = require('role.Upgrader');
 
 module.exports = {
     // a function to run the logic for this role
@@ -18,11 +18,24 @@ module.exports = {
         if (creep.memory.working == true) {
             var structure = creep.pos.findClosestByPath(FIND_MY_STRUCTURES, { filter: (s) => (s.structureType == STRUCTURE_SPAWN || s.structureType == STRUCTURE_EXTENSION || s.structureType == STRUCTURE_TOWER) && s.energy < s.energyCapacity });
 
+            if (structure == undefined) {
+                structure = creep.room.storage;
+            }
+
             if (structure != undefined) {
                 // try to transfer energy, if the spawn is not in range
-                if (creep.transfer(structure, RESOURCE_ENERGY) == ERR_NOT_IN_RANGE) {
-                    // move towards the spawn
-                    creep.travelTo(structure);
+                let action = creep.transfer(structure, RESOURCE_ENERGY);
+                switch (action) {
+                    case OK:
+                        creep.say('📥 Deposit', true);
+                        break;
+                    case ERR_NOT_IN_RANGE:
+                        creep.travelTo(structure);
+                        break;
+                    case ERR_BUSY:
+                        break;
+                    default:
+                        console.log(`unknown result from (${creep}).transfer(${structure}): ${action}`);
                 }
             }
             else {
@@ -34,9 +47,18 @@ module.exports = {
             // find closest source
             var source = creep.pos.findClosestByPath(FIND_SOURCES_ACTIVE);
             // try to harvest energy, if the source is not in range
-            if (creep.harvest(source) == ERR_NOT_IN_RANGE) {
-                // move towards the source
-                creep.travelTo(source);
+            let action = creep.harvest(source);
+            switch (action) {
+                case OK:
+                    creep.say('⛏ Harvest', true);
+                    break;
+                case ERR_NOT_IN_RANGE:
+                    creep.travelTo(source);
+                    break;
+                case ERR_BUSY:
+                    break;
+                default:
+                    console.log(`unknown result from (${creep}).harvest(${source}): ${action}`);
             }
         }
     }

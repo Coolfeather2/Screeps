@@ -1,4 +1,4 @@
-var roleBuilder = require('role.Builder');
+﻿var roleBuilder = require('role.Builder');
 
 module.exports = {
     // a function to run the logic for this role
@@ -19,9 +19,18 @@ module.exports = {
             // try to transfer energy, if the spawn is not in range
             var structure = creep.pos.findClosestByPath(FIND_STRUCTURES, { filter: (s) => s.hits < s.hitsMax && s.structureType != STRUCTURE_WALL && s.structureType != STRUCTURE_RAMPART });
             if (structure != undefined) {
-                if (creep.repair(structure) == ERR_NOT_IN_RANGE) {
-                    // move towards the spawn
-                    creep.travelTo(structure);
+                let action = creep.repair(structure);
+                switch (action) {
+                    case OK:
+                        creep.say('🔧 Repair', true);
+                        break;
+                    case ERR_NOT_IN_RANGE:
+                        creep.travelTo(structure);
+                        break;
+                    case ERR_BUSY:
+                        break;
+                    default:
+                        console.log(`unknown result from (${creep}).repair(${structure}): ${action}`);
                 }
             }
             else {
@@ -31,24 +40,41 @@ module.exports = {
         // if creep is supposed to harvest energy from source
         else {
             // find closest source
-            var container = creep.pos.findClosestByPath(FIND_STRUCTURES, { filter: s => s.structureType == STRUCTURE_CONTAINER && s.store[RESOURCE_ENERGY] > 0 });
+            var container = creep.pos.findClosestByPath(FIND_STRUCTURES, { filter: s => (s.structureType == STRUCTURE_STORAGE || s.structureType == STRUCTURE_CONTAINER) && s.store[RESOURCE_ENERGY] > 0 });
             // try to harvest energy, if the source is not in range
             if (container != undefined) {
-                if (creep.withdraw(container, RESOURCE_ENERGY) == ERR_NOT_IN_RANGE) {
-                    // move towards the source
-                    creep.travelTo(container);
+                let action = creep.withdraw(container, RESOURCE_ENERGY);
+                switch (action) {
+                    case OK:
+                        creep.say('📤 Collect', true);
+                        break;
+                    case ERR_NOT_IN_RANGE:
+                        creep.travelTo(container);
+                        break;
+                    case ERR_BUSY:
+                        break;
+                    default:
+                        console.log(`unknown result from (${creep}).withdraw(${container}): ${action}`);
                 }
             }
             else {
                 // find closest source
                 var source = creep.pos.findClosestByPath(FIND_SOURCES_ACTIVE);
                 // try to harvest energy, if the source is not in range
-                if (creep.harvest(source) == ERR_NOT_IN_RANGE) {
-                    // move towards the source
-                    creep.travelTo(source);
+                let action = creep.harvest(source);
+                switch (action) {
+                    case OK:
+                        creep.say('⛏ Harvest', true);
+                        break;
+                    case ERR_NOT_IN_RANGE:
+                        creep.travelTo(source);
+                        break;
+                    case ERR_BUSY:
+                        break;
+                    default:
+                        console.log(`unknown result from (${creep}).harvest(${source}): ${action}`);
                 }
             }
         }
-
     }
 };
