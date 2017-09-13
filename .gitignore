@@ -9,6 +9,7 @@
 *.userosscache
 *.sln.docstates
 *.sln
+*.ts
 ScreepsAutocomplete/
 
 # User-specific files (MonoDevelop/Xamarin Studio)
