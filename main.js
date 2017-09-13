@@ -1,4 +1,5 @@
 //Command to spawn claimer: Game.spawns.Spawn1.memory.claimRoom = '<roomname>'
+//Command to send worker to another room: Game.creeps.<creepname>.memory.target = '<roomname>''
 //forceInjectLoAN()
 
 // import modules
