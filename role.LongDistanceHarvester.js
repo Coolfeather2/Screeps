@@ -1,4 +1,4 @@
-﻿var roleUpgrader = require('role.Upgrader');
+var roleUpgrader = require('role.Upgrader');
 
 module.exports = {
     // a function to run the logic for this role
@@ -17,7 +17,7 @@ module.exports = {
         // if creep is supposed to transfer energy to the spawn
         if (creep.memory.working == true) {
             if (creep.room.name == creep.memory.home) {
-                creep.PutEnergy(true)
+                creep.PutEnergy(false)
             }
             else {
                 var exit = creep.room.findExitTo(creep.memory.home);

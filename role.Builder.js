@@ -1,4 +1,4 @@
-﻿var roleUpgrader = require('role.Upgrader');
+var roleUpgrader = require('role.Upgrader');
 
 module.exports = {
     // a function to run the logic for this role
@@ -34,7 +34,7 @@ module.exports = {
                         creep.say('⚒ Building', true);
                         break;
                     case ERR_NOT_IN_RANGE:
-                        creep.travelTo(container);
+                        creep.travelTo(constructionSite);
                         break;
                     case ERR_BUSY:
                         break;

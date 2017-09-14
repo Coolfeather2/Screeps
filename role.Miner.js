@@ -1,4 +1,4 @@
-﻿module.exports = {
+module.exports = {
     // a function to run the logic for this role
     run: function (creep) {
         let source = Game.getObjectById(creep.memory.sourceID);

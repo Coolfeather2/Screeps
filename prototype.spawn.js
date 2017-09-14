@@ -54,9 +54,9 @@ StructureSpawn.prototype.spawnCreeps =
         let numberOfLongDistanceHarvesters = {}
         if (name == undefined) {
             for (let roomName in this.memory.LongDistanceHarvesters) {
-                numberOfLongDistanceHarvesters[roomName] = _.sum(creepsInRoom, (c) => c.memory.role == 'LongDistanceHarvester' && c.memory.target == roomName);
+                numberOfLongDistanceHarvesters[roomName] = _.sum(Game.creeps, (c) => c.memory.role == 'LongDistanceHarvester' && c.memory.target == roomName);
                 if (numberOfLongDistanceHarvesters[roomName] < this.memory.LongDistanceHarvesters[roomName]) {
-                    name = this.createLongDistanceHarvester(energy, 4, this.room.name, roomName, 0);
+                    name = this.createLongDistanceHarvester(energy, 5, this.room.name, roomName, 0);
                 }
             }
         }
@@ -67,7 +67,7 @@ StructureSpawn.prototype.spawnCreeps =
             for (let role of listOfRoles) {
                 console.log(role + ": " + numberOfCreeps[role] + "/" + this.memory.minCreeps[role]);
             }
-            for (let roomName in numberOfLongDistanceHarvesters) {
+            for (let roomName in this.memory.LongDistanceHarvesters) {
                 console.log("Distance Harvester " + roomName + ": " + numberOfLongDistanceHarvesters[roomName] + "/" + this.memory.LongDistanceHarvesters[roomName]);
             }
             console.log('----------------------------------------');

@@ -1,4 +1,4 @@
-﻿module.exports = {
+module.exports = {
     // a function to run the logic for this role
     run: function (creep) {
         // if creep is bringing energy to the controller but has no energy left

@@ -1,4 +1,4 @@
-﻿module.exports = {
+module.exports = {
     run: function (creep) {
         if (creep.room.name != creep.memory.target) {
             var exit = creep.room.findExitTo(creep.memory.target);
