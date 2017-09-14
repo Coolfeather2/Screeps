@@ -50,7 +50,7 @@ StructureSpawn.prototype.spawnCreeps =
                 }
             }
 
-            let numberOfLongDistanceHarvesters = {}
+            var numberOfLongDistanceHarvesters = {}
             if (name == undefined) {
                 for (let roomName in this.memory.LongDistanceHarvesters) {
                     numberOfLongDistanceHarvesters[roomName] = _.sum(creepsInRoom, (c) => c.memory.role == 'LongDistanceHarvester' && c.memory.target == roomName);
@@ -59,6 +59,7 @@ StructureSpawn.prototype.spawnCreeps =
                     }
                 }
             }
+            //console.log(JSON.stringify(numberOfLongDistanceHarvesters));
         }
         if (name != undefined && _.isString(name)) {
             console.log('----------------------------------------');
@@ -66,7 +67,7 @@ StructureSpawn.prototype.spawnCreeps =
             for (let role of listOfRoles) {
                 console.log(role + ": " + numberOfCreeps[role] + "/" + this.memory.minCreeps[role]);
             }
-            for (let roomName in numberOfLongDistanceHarvesters[roomName]) {
+            for (let roomName in numberOfLongDistanceHarvesters) {
                 console.log("Distance Harvester " + roomName + ": " + numberOfLongDistanceHarvesters[roomName] + "/" + this.memory.LongDistanceHarvesters[roomName]);
             }
             console.log('----------------------------------------');
