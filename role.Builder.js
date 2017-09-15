@@ -48,7 +48,7 @@ module.exports = {
         }
         // if creep is supposed to harvest energy from source
         else {
-            creep.GetEnergy(true, false)
+            creep.GetEnergy(true, true)
         }
     }
 };
