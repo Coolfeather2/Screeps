@@ -1,4 +1,4 @@
-var listOfRoles = ['Harvester', 'Carrier', 'Upgrader', 'Builder', 'Repairer', 'WallRepairer']
+var listOfRoles = ['Harvester', 'Builder', 'Upgrader', 'Repairer', 'Carrier', 'WallRepairer', 'Claimer']
 
 StructureSpawn.prototype.spawnCreeps =
     function () {
