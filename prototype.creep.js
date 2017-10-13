@@ -65,9 +65,7 @@ Creep.prototype.PutEnergy =
         if (structure == undefined) {
             structure = this.room.storage;
         }
-        
         if (structure != undefined) {
-            // try to transfer energy, if the spawn is not in range
             let action = this.transfer(structure, RESOURCE_ENERGY);
             switch (action) {
                 case OK:
@@ -82,7 +80,8 @@ Creep.prototype.PutEnergy =
                     console.log(`unknown result from (${this}).transfer(${structure}): ${action}`);
             }
         }
-        else if (upgrade){
+        //If the creep should fall back to upgrading the controller
+        else if (upgrade) {
             roleUpgrader.run(creep);
         }
     }
